@@ -5,7 +5,7 @@ from django.utils import timezone
 class Suscriptor(models.Model):
   email = models.EmailField(primary_key=True)
   name = models.CharField(max_length=100)
-  suscribed = models.BooleanField()
+  suscribed = models.BooleanField(default=True)
   def __str__(self):
     return self.email
 
