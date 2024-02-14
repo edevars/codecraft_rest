@@ -37,3 +37,61 @@ All the dev environment is running in docker so you need to up all the services 
 ```bash
 docker compose up
 ```
+
+### 4. Manage packages locally with venv (optional)
+
+If you want to handle your python packages locally outside the docker container you need to create a virtual env using the `requirements.txt` file and then activate them. To do this execute:
+
+**Create virual env**
+```bash
+python -m venv .venv
+```
+
+**Activate the virtual env**
+```bash
+source .venv/bin/activate
+```
+
+**Install local packages**
+```bash
+pip install -r requirements.txt
+```
+
+## ER Diagram
+
+```mermaid
+erDiagram
+    SUSCRIPTOR {
+        email TEXT
+        name TEXT
+        suscribed BOOLEAN
+    }
+
+    TEMPLATE {
+        id INT
+        subject TEXT
+        content TEXT
+    }
+
+    NEWSLETTER {
+        id INT
+        name TEXT
+        sending_date TIMESTAMP
+    }
+
+    SENT_LOGS {
+        id INT
+        date_sent TIMESTAMP 
+    }
+
+        AUDIENCE {
+        id INT
+        name TEXT
+    }
+
+SUSCRIPTOR }|--|{ AUDIENCE : is_in
+AUDIENCE }|--|{ NEWSLETTER : sent
+NEWSLETTER ||--|{ SENT_LOGS : register
+SUSCRIPTOR ||--|{ SENT_LOGS : register
+TEMPLATE ||--|{ NEWSLETTER : has
+```
