@@ -84,13 +84,6 @@ erDiagram
         date_sent TIMESTAMP 
     }
 
-        AUDIENCE {
-        id INT
-        name TEXT
-    }
-
-SUSCRIPTOR }|--|{ AUDIENCE : is_in
-AUDIENCE }|--|{ NEWSLETTER : sent
 NEWSLETTER ||--|{ SENT_LOGS : register
 SUSCRIPTOR ||--|{ SENT_LOGS : register
 TEMPLATE ||--|{ NEWSLETTER : has

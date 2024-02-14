@@ -6,24 +6,26 @@ class Suscriptor(models.Model):
   email = models.EmailField(primary_key=True)
   name = models.CharField(max_length=100)
   suscribed = models.BooleanField()
+  def __str__(self):
+    return self.email
 
 class Template(models.Model):
+  name = models.CharField(default="")
   subject = models.CharField(max_length=200)
-  content = models.CharField()
+  content = models.TextField()
 
-class Audience(models.Model):
-  name = models.CharField(max_length=100)
-  suscriptor = models.ManyToManyField(Suscriptor)
-
+  def __str__(self):
+    return self.name
 class Newsletter(models.Model):
   name = models.CharField(max_length=100)
-  sending_date = models.DateField()
-  audience = models.ManyToManyField(Audience)
+  sending_date = models.DateTimeField()
   template = models.ForeignKey(Template, on_delete=models.PROTECT)
+  def __str__(self):
+    return self.name
 
   def clean(self):
     super().clean()
-    if self.sending_date < timezone.now().date():
+    if self.sending_date < timezone.now():
       raise ValidationError("Sending date needs to be equal or later than now")
 
 class Sent_Logs(models.Model):
