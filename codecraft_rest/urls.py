@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from newsletter.api.views import SuscriptorApiView
+from newsletter.api.views import SuscriptorApiView, TemplateApiView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/suscriptors/', SuscriptorApiView.as_view())
+    path('api/suscriptors/', SuscriptorApiView.as_view()),
+    path('api/templates/', TemplateApiView.as_view())
 ]

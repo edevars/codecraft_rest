@@ -67,6 +67,11 @@ erDiagram
         suscribed BOOLEAN
     }
 
+    CATEGORY {
+        id INT
+        topic TEXT
+    }
+
     TEMPLATE {
         id INT
         subject TEXT
@@ -76,7 +81,6 @@ erDiagram
     NEWSLETTER {
         id INT
         name TEXT
-        sending_date TIMESTAMP
     }
 
     SENT_LOGS {
@@ -86,5 +90,7 @@ erDiagram
 
 NEWSLETTER ||--|{ SENT_LOGS : register
 SUSCRIPTOR ||--|{ SENT_LOGS : register
+SUSCRIPTOR }|--|{ CATEGORY : has
 TEMPLATE ||--|{ NEWSLETTER : has
+CATEGORY ||--|{ TEMPLATE : has
 ```

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from newsletter.models import Suscriptor
+from newsletter.models import Suscriptor, Template
 
 class SuscriptorSerializer(ModelSerializer):
   class Meta:
@@ -22,3 +22,8 @@ class UnsuscribeSerializer(serializers.Serializer):
     instance.suscribed = validated_data.get('suscribed', instance.suscribed)
     instance.save()
     return instance
+
+class TemplateSerializer(ModelSerializer):
+  class Meta:
+    model = Template
+    fields = ['name','subject', 'content','category_id']
