@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 class Category(models.Model):
-  topic = models.CharField(max_length=255)
+  topic = models.CharField(max_length=255, unique=True)
 
   def __str__(self):
     return self.topic
