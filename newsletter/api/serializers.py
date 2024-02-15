@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from newsletter.models import Suscriptor, Template
+from newsletter.models import Suscriptor, Template, Category
 
 class SuscriptorSerializer(ModelSerializer):
   class Meta:
@@ -23,7 +23,14 @@ class UnsuscribeSerializer(serializers.Serializer):
     instance.save()
     return instance
 
-class TemplateSerializer(ModelSerializer):
-  class Meta:
-    model = Template
-    fields = ['name','subject', 'content','category_id']
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('topic',)
+
+class TemplateSerializer(serializers.ModelSerializer):
+    category_topic = serializers.CharField(source='category_id.topic', read_only=True)
+    
+    class Meta:
+        model = Template
+        fields = ('id','name', 'subject', 'content', 'category_id', 'category_topic')
