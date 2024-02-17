@@ -4,6 +4,9 @@ from rest_framework import status
 from newsletter.models import Suscriptor, Template, Category
 from newsletter.api.serializers import SuscriptorSerializer, CreateSuscriptorSerializer, UnsuscribeSerializer, TemplateSerializer
 from newsletter.api.serializers import CategorySerializer
+from rest_framework import generics
+
+
 class SuscriptorApiView(APIView):
 
   def get(self, request):
@@ -39,24 +42,13 @@ class SuscriptorApiView(APIView):
       return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
-class TemplateApiView(APIView):
-  def get(self, request):
-    try:
-      templates = Template.objects.all()
-      serialized_templates = TemplateSerializer(templates, many=True)
-      return Response(
-        status=status.HTTP_200_OK,
-        data=serialized_templates.data
-      )
-    except:
-      return Response(serialized_templates.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-  
-  def post(self, request):
-    serializer = TemplateSerializer(data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class TemplateDetailView(generics.RetrieveAPIView):
+  queryset = Template.objects.all()
+  serializer_class = TemplateSerializer
+
+class TemplateListView(generics.ListCreateAPIView):
+  queryset = Template.objects.all()
+  serializer_class = TemplateSerializer
 
 class CategoryApiView(APIView):
   def get(self, request):
