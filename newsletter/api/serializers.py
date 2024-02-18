@@ -26,7 +26,7 @@ class UnsuscribeSerializer(serializers.Serializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('topic',)
+        fields = ('id','topic',)
 
 class TemplateSerializer(serializers.ModelSerializer):
     category_topic = serializers.CharField(source='category_id.topic', read_only=True)
