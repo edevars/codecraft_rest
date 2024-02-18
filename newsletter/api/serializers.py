@@ -33,4 +33,4 @@ class TemplateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Template
-        fields = ('id','name', 'subject', 'content', 'category_id', 'category_topic')
+        fields = ('id','name', 'subject', 'content', 'category_id', 'category_topic', 'attached_file')

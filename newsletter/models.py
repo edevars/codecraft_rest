@@ -22,9 +22,11 @@ class Template(models.Model):
   subject = models.CharField(max_length=200)
   content = models.TextField()
   category_id = models.ForeignKey(Category, on_delete=models.PROTECT)
+  attached_file = models.FileField(upload_to='attached_files/', blank=True, null=True)
 
   def __str__(self):
     return self.name
+
 class Newsletter(models.Model):
   name = models.CharField(max_length=100)
   template = models.ForeignKey(Template, on_delete=models.PROTECT)

@@ -1,11 +1,14 @@
 from django.http import Http404
+
+from rest_framework import generics
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+
 from newsletter.models import Suscriptor, Template, Category
 from newsletter.api.serializers import SuscriptorSerializer, CreateSuscriptorSerializer, UnsuscribeSerializer, TemplateSerializer
 from newsletter.api.serializers import CategorySerializer
-from rest_framework import generics
 
 
 class SuscriptorApiView(APIView):
@@ -70,6 +73,15 @@ class TemplateDetailView(APIView):
 class TemplateListView(generics.ListCreateAPIView):
   queryset = Template.objects.all()
   serializer_class = TemplateSerializer
+  parser_classes = (MultiPartParser, FormParser)
+
+  def perform_create(self, serializer):
+     attached_file = self.request.data.get('attached_file')
+     serializer.save(atached_file=attached_file)
+
+  def perform_update(self, serializer):
+    attached_file = self.request.data.get('attached_file')
+    serializer.save(atached_file=attached_file)
 
 class CategoryListView(generics.ListCreateAPIView):
   queryset = Category.objects.all()

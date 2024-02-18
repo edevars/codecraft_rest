@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from newsletter.api.views import SuscriptorApiView
 from newsletter.api.views import TemplateDetailView
 from newsletter.api.views import TemplateListView
@@ -30,4 +32,4 @@ urlpatterns = [
     path('api/templates/<int:pk>/', TemplateDetailView.as_view()),
     path('api/categories/', CategoryListView.as_view()),
     path('api/categories/<int:pk>/', CategoryUpdateDeleteView.as_view())
-]
+] + static(settings.ATTACHED_FILES_URL, document_root=settings.ATTACHED_FILES_ROOT)
