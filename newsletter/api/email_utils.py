@@ -1,4 +1,4 @@
-from newsletter.models import Template, Suscriptor, Sent_Logs, Newsletter
+from newsletter.models import Template, Suscriptor, Newsletter
 from django.core.mail import EmailMessage
 from django.conf import settings
 import markdown
@@ -66,8 +66,7 @@ def send_email(template_id, recipients, newsletter_name):
       message.send()
       success_emails.append(message.to)
     
-    new_newsletter = Newsletter.objects.create(name=newsletter_name, template=template)
-    Sent_Logs.objects.create(count_sent=len(suscriptor), newsletter=new_newsletter)
+    Newsletter.objects.create(name=newsletter_name, template=template, count_sent=len(suscriptor))
 
     return success_emails
   except Template.DoesNotExist:

@@ -81,15 +81,11 @@ erDiagram
     NEWSLETTER {
         id INT
         name TEXT
+        date_sent TIMESTAMP
+        count_sent INT 
     }
 
-    SENT_LOGS {
-        id INT
-        date_sent TIMESTAMP 
-    }
 
-NEWSLETTER ||--|{ SENT_LOGS : register
-SUSCRIPTOR ||--|{ SENT_LOGS : register
 SUSCRIPTOR }|--|{ CATEGORY : has
 TEMPLATE ||--|{ NEWSLETTER : has
 CATEGORY ||--|{ TEMPLATE : has

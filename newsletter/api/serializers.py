@@ -41,7 +41,7 @@ class NewsletterSerializer(serializers.ModelSerializer):
     template_topic = serializers.CharField(source='template.category_id.topic', read_only=True)
     class Meta:
         model = Newsletter
-        fields = ('id','name', 'template_id', 'template_name', 'template_topic')
+        fields = ('id','name', 'template_id', 'template_name', 'template_topic', 'date_sent', 'count_sent')
 
 
 class RecipientSerializer(serializers.Serializer):

@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 class Category(models.Model):
@@ -30,10 +29,8 @@ class Template(models.Model):
 class Newsletter(models.Model):
   name = models.CharField(max_length=100)
   template = models.ForeignKey(Template, on_delete=models.PROTECT)
+  date_sent = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+  count_sent = models.IntegerField(default=0)
+
   def __str__(self):
     return self.name
-
-class Sent_Logs(models.Model):
-  date_sent = models.DateTimeField(auto_now_add=True)
-  count_sent = models.IntegerField(default=0)
-  newsletter = models.ForeignKey(Newsletter, on_delete=models.PROTECT)
