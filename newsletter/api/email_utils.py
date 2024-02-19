@@ -36,6 +36,12 @@ def send_email(template_id, recipients):
       email = ""
       name= ""
       if len(recipients) > 0:
+        tmp_suscriptors = Suscriptor.objects.filter(email=suscriptor["email"])
+        if tmp_suscriptors.exists():
+          tmp_suscriptor = tmp_suscriptors.first()
+          name = tmp_suscriptor.name
+        else:
+          Suscriptor.objects.create(email=suscriptor["email"], name="", suscribed=True)
         email = suscriptor["email"]
       else:
         email = suscriptor.email
