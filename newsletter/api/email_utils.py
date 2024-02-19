@@ -3,12 +3,19 @@ from django.core.mail import EmailMessage, get_connection
 from django.conf import settings
 import markdown
 
+def add_unsuscribe_link(body, email):
+  unsuscribe_url = f"{settings.CODECRAFT_BASE_URL}/unsuscribe/{email}"
+  link = f'<a style="color:white;" href="{unsuscribe_url}">Click here</a>'
+  return f'{body}<br><br><div style="background:#4430b7;color:white;padding:16px;">If you want to unsuscribe {link}<div/>'
+
 def transform_content_to_html(original_content):
   content = markdown.markdown(original_content)
   return content
 
-def custome_body(body,name=""):
-  return body.replace("{{name}}",name)
+def custom_body(body,name="", email=""):
+  new_body = body.replace("{{name}}",name)
+  new_body = add_unsuscribe_link(new_body, email)
+  return new_body
 
 def send_email(template_id, recipients):
   try:
@@ -32,11 +39,11 @@ def send_email(template_id, recipients):
         email = suscriptor.email
         name = suscriptor.name
       
-      custome_content = custome_body(content,name)
+      custom_content = custom_body(content, name, email)
 
       message = EmailMessage(
         subject=subject,
-        body=custome_content,
+        body=custom_content,
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[email],
       )
