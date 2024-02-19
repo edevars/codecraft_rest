@@ -66,7 +66,7 @@ def send_email(template_id, recipients, newsletter_name):
       message.send()
       success_emails.append(message.to)
     
-    Newsletter.objects.create(name=newsletter_name, template=template, count_sent=len(suscriptor))
+    Newsletter.objects.create(name=newsletter_name, template=template, count_sent=len(success_emails))
 
     return success_emails
   except Template.DoesNotExist:
