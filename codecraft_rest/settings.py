@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import dj_database_url
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -77,7 +78,11 @@ WSGI_APPLICATION = 'codecraft_rest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
+DEBUG = config("DEBUG", default=False, cast=bool)
+db_config = None
+
+if (DEBUG):
+  db_config = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": config("POSTGRES_DB"),
@@ -85,8 +90,16 @@ DATABASES = {
         "PASSWORD": config("POSTGRES_PASSWORD"),
         "HOST": "db",
         "PORT": 5432, 
+        }
     }
-}
+else:
+    db_config = {
+        "default": dj_database_url.config(
+            default=config("POSTGRES_URL")
+        )
+    }
+
+DATABASES = db_config
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
