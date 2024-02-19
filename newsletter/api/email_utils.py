@@ -49,18 +49,19 @@ def send_email(template_id, recipients, newsletter_name):
       
       custom_content = custom_body(content, name, email)
 
-      message = EmailMessage(
-        subject=subject,
-        body=custom_content,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[email],
-      )
-      message.content_subtype = 'html'
+      if suscriptor.suscribed:
+        message = EmailMessage(
+          subject=subject,
+          body=custom_content,
+          from_email=settings.DEFAULT_FROM_EMAIL,
+          to=[email],
+        )
+        message.content_subtype = 'html'
 
-      if file_path:
-        message.attach_file(file_path)
+        if file_path:
+          message.attach_file(file_path)
 
-      messages.append(message)
+        messages.append(message)
 
     for message in messages:
       message.send()
