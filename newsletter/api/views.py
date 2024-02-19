@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from newsletter.models import Suscriptor, Template, Category
-from newsletter.api.serializers import SuscriptorSerializer, CreateSuscriptorSerializer, UnsuscribeSerializer, TemplateSerializer, SendEmailSerializer
+from newsletter.models import Suscriptor, Template, Category, Newsletter
+from newsletter.api.serializers import SuscriptorSerializer, CreateSuscriptorSerializer, UnsuscribeSerializer, TemplateSerializer, SendEmailSerializer, NewsletterSerializer
 from newsletter.api.serializers import CategorySerializer
 from .email_utils import send_email
 
@@ -104,10 +104,15 @@ class SendEmailView(APIView):
     if serializer.is_valid():
       template_id = serializer.validated_data['template_id']
       recipients = serializer.validated_data['recipients']
+      newsletter_name = serializer.validated_data['newsletter_name']
       try:
-        success_emails = send_email(template_id, recipients)
+        success_emails = send_email(template_id, recipients, newsletter_name)
         return Response({'success': True, 'message': 'Emails sent successfully', 'success_emails_sent': len(success_emails)}, status=status.HTTP_200_OK)
       except ValueError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class NewsletterListView(generics.ListCreateAPIView):
+  queryset = Newsletter.objects.all()
+  serializer_class = NewsletterSerializer

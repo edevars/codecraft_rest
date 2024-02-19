@@ -17,7 +17,7 @@ def custom_body(body,name="", email=""):
   new_body = add_unsuscribe_link(new_body, email)
   return new_body
 
-def send_email(template_id, recipients):
+def send_email(template_id, recipients, newsletter_name):
   try:
     template = Template.objects.get(pk=template_id)
     suscriptors = recipients
@@ -66,7 +66,7 @@ def send_email(template_id, recipients):
       message.send()
       success_emails.append(message.to)
     
-    new_newsletter = Newsletter.objects.create(name=subject, template=template)
+    new_newsletter = Newsletter.objects.create(name=newsletter_name, template=template)
     Sent_Logs.objects.create(count_sent=len(suscriptor), newsletter=new_newsletter)
 
     return success_emails

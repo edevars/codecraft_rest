@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from newsletter.models import Suscriptor, Template, Category
+from newsletter.models import Suscriptor, Template, Category, Newsletter
 
 class SuscriptorSerializer(ModelSerializer):
   class Meta:
@@ -35,12 +35,23 @@ class TemplateSerializer(serializers.ModelSerializer):
         model = Template
         fields = ('id','name', 'subject', 'content', 'category_id', 'category_topic', 'attached_file')
 
+
+class NewsletterSerializer(serializers.ModelSerializer):
+    template_name = serializers.CharField(source='template.name', read_only=True)
+    template_topic = serializers.CharField(source='template.category_id.topic', read_only=True)
+    class Meta:
+        model = Newsletter
+        fields = ('id','name', 'template_id', 'template_name', 'template_topic')
+
+
 class RecipientSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 class SendEmailSerializer(serializers.Serializer):
+  newsletter_name = serializers.CharField()
   template_id = serializers.IntegerField()
   recipients = RecipientSerializer(many=True, allow_empty=True)
+
   class Meta:
-    fields = ['template_id', 'recipients']
-    read_only_fields = ['template_id', 'recipients']
+    fields = ['newsletter_name','template_id', 'recipients']
+    read_only_fields = ['newsletter_name','template_id', 'recipients']
