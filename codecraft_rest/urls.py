@@ -25,6 +25,7 @@ from newsletter.api.views import CategoryListView
 from newsletter.api.views import CategoryUpdateDeleteView
 from newsletter.api.views import SendEmailView
 from newsletter.api.views import NewsletterListView
+from newsletter.api.views import DashboardView
 
 
 urlpatterns = [
@@ -35,5 +36,6 @@ urlpatterns = [
     path('api/categories/', CategoryListView.as_view()),
     path('api/categories/<int:pk>/', CategoryUpdateDeleteView.as_view()),
     path('api/email/', SendEmailView.as_view()),
-    path('api/newsletters/', NewsletterListView.as_view())
+    path('api/newsletters/', NewsletterListView.as_view()),
+    path('api/dashboard/', DashboardView.as_view())
 ] + static(settings.ATTACHED_FILES_URL, document_root=settings.ATTACHED_FILES_ROOT)

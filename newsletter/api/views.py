@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.db.models import Sum, Count
 
 from rest_framework import generics
 from rest_framework import status
@@ -116,3 +117,17 @@ class SendEmailView(APIView):
 class NewsletterListView(generics.ListAPIView):
   queryset = Newsletter.objects.all()
   serializer_class = NewsletterSerializer
+
+class DashboardView(APIView):
+  def get(self, request):
+    suscriptors =  Suscriptor.objects.filter(suscribed=True).count()
+    unsubscribed = Suscriptor.objects.filter(suscribed=False).count()
+    total_sent = Newsletter.objects.aggregate(Sum('count_sent'))['count_sent__sum']
+    template_id = Newsletter.objects.values('template').annotate(total=Count('template')).order_by('-total').first()['template']
+    more_sent_template = Template.objects.get(id=template_id).name
+    return Response({
+      'suscriptors': suscriptors, 
+      'unsubscribed':unsubscribed ,
+      'total_sent': total_sent, 
+      'more_sent_template': more_sent_template }, 
+      status=status.HTTP_200_OK)
