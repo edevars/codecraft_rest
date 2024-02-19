@@ -113,6 +113,6 @@ class SendEmailView(APIView):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class NewsletterListView(generics.ListCreateAPIView):
+class NewsletterListView(generics.ListAPIView):
   queryset = Newsletter.objects.all()
   serializer_class = NewsletterSerializer
