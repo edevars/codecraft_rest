@@ -33,23 +33,21 @@ def send_email(template_id, recipients, newsletter_name):
     messages = []
 
     for suscriptor in suscriptors:
-      email = ""
-      name= ""
+      tmp_suscriptor = suscriptor
       if len(recipients) > 0:
-        tmp_suscriptors = Suscriptor.objects.filter(email=suscriptor["email"])
-        if tmp_suscriptors.exists():
-          tmp_suscriptor = tmp_suscriptors.first()
-          name = tmp_suscriptor.name
+        tmp_suscriptor = Suscriptor.objects.filter(email=suscriptor["email"])
+        if tmp_suscriptor.exists():
+          tmp_suscriptor = Suscriptor.objects.get(email=suscriptor["email"])
+          print("Existed",tmp_suscriptor)
         else:
-          Suscriptor.objects.create(email=suscriptor["email"], name="", suscribed=True)
-        email = suscriptor["email"]
-      else:
-        email = suscriptor.email
-        name = suscriptor.name
-      
+          tmp_suscriptor = Suscriptor.objects.create(email=suscriptor["email"], name="", suscribed=True)
+
+      name = tmp_suscriptor.name
+      email = tmp_suscriptor.email
+    
       custom_content = custom_body(content, name, email)
 
-      if suscriptor.suscribed:
+      if tmp_suscriptor.suscribed:
         message = EmailMessage(
           subject=subject,
           body=custom_content,
