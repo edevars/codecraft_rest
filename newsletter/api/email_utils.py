@@ -16,11 +16,17 @@ def send_email(template_id, recipients):
     messages = []
 
     for suscriptor in suscriptors:
+      email = ""
+      if len(recipients) > 0:
+        email = suscriptor["email"]
+      else:
+        email = suscriptor.email
+      
       message = EmailMessage(
         subject=subject,
         body=content,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[suscriptor.email],
+        to=[email],
       )
 
       if file_path:

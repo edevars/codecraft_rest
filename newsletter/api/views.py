@@ -106,7 +106,7 @@ class SendEmailView(APIView):
       recipients = serializer.validated_data['recipients']
       try:
         success_emails = send_email(template_id, recipients)
-        return Response({'success': True, 'message': 'Emails sent successfully', 'success_emails': success_emails}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'message': 'Emails sent successfully', 'success_emails_sent': len(success_emails)}, status=status.HTTP_200_OK)
       except ValueError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     else:
