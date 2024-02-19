@@ -7,12 +7,12 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from newsletter.models import Suscriptor, Template, Category
-from newsletter.api.serializers import SuscriptorSerializer, CreateSuscriptorSerializer, UnsuscribeSerializer, TemplateSerializer
+from newsletter.api.serializers import SuscriptorSerializer, CreateSuscriptorSerializer, UnsuscribeSerializer, TemplateSerializer, SendEmailSerializer
 from newsletter.api.serializers import CategorySerializer
+from .email_utils import send_email
 
 
 class SuscriptorApiView(APIView):
-
   def get(self, request):
     try:
       suscriptors = Suscriptor.objects.all()
@@ -88,12 +88,26 @@ class CategoryListView(generics.ListCreateAPIView):
   serializer_class = CategorySerializer
 
 class CategoryUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    lookup_field = 'pk'
+  queryset = Category.objects.all()
+  serializer_class = CategorySerializer
+  lookup_field = 'pk'
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+  def put(self, request, *args, **kwargs):
+      return self.update(request, *args, **kwargs)
+  
+  def delete(self, request, *args, **kwargs):
+      return self.destroy(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+class SendEmailView(APIView):
+  def post(self, request):
+    serializer = SendEmailSerializer(data=request.data)
+    if serializer.is_valid():
+      template_id = serializer.validated_data['template_id']
+      recipients = serializer.validated_data['recipients']
+      try:
+        success_emails = send_email(template_id, recipients)
+        return Response({'success': True, 'message': 'Emails sent successfully', 'success_emails': success_emails}, status=status.HTTP_200_OK)
+      except ValueError as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

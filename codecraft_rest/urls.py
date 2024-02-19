@@ -23,6 +23,7 @@ from newsletter.api.views import TemplateDetailView
 from newsletter.api.views import TemplateListView
 from newsletter.api.views import CategoryListView
 from newsletter.api.views import CategoryUpdateDeleteView
+from newsletter.api.views import SendEmailView
 
 
 urlpatterns = [
@@ -31,5 +32,6 @@ urlpatterns = [
     path('api/templates/', TemplateListView.as_view()),
     path('api/templates/<int:pk>/', TemplateDetailView.as_view()),
     path('api/categories/', CategoryListView.as_view()),
-    path('api/categories/<int:pk>/', CategoryUpdateDeleteView.as_view())
+    path('api/categories/<int:pk>/', CategoryUpdateDeleteView.as_view()),
+    path('api/email/', SendEmailView.as_view())
 ] + static(settings.ATTACHED_FILES_URL, document_root=settings.ATTACHED_FILES_ROOT)

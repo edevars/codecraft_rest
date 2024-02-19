@@ -34,3 +34,10 @@ class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Template
         fields = ('id','name', 'subject', 'content', 'category_id', 'category_topic', 'attached_file')
+
+class SendEmailSerializer(serializers.Serializer):
+  template_id = serializers.IntegerField()
+  recipients = serializers.ListField(child=serializers.EmailField())
+  class Meta:
+    fields = ['template_id', 'recipients']
+    read_only_fields = ['template_id', 'recipients']
