@@ -77,11 +77,11 @@ class TemplateListView(generics.ListCreateAPIView):
 
   def perform_create(self, serializer):
      attached_file = self.request.data.get('attached_file')
-     serializer.save(atached_file=attached_file)
+     serializer.save(attached_file=attached_file)
 
   def perform_update(self, serializer):
     attached_file = self.request.data.get('attached_file')
-    serializer.save(atached_file=attached_file)
+    serializer.save(attached_file=attached_file)
 
 class CategoryListView(generics.ListCreateAPIView):
   queryset = Category.objects.all()

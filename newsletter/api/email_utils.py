@@ -26,7 +26,9 @@ def send_email(template_id, recipients):
     
     subject = template.subject
     content = transform_content_to_html(template.content)
-    file_path = template.attached_file.path
+    file_path = None
+    if template.attached_file:
+      file_path = template.attached_file.path
     success_emails = []
     messages = []
 
