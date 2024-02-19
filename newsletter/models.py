@@ -35,5 +35,5 @@ class Newsletter(models.Model):
 
 class Sent_Logs(models.Model):
   date_sent = models.DateTimeField(auto_now_add=True)
-  suscriptor = models.ForeignKey(Suscriptor, on_delete=models.PROTECT)
+  count_sent = models.IntegerField(default=0)
   newsletter = models.ForeignKey(Newsletter, on_delete=models.PROTECT)
